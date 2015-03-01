@@ -34,6 +34,8 @@
         use-expressions="true" authentication-manager-ref="emptyAuthenticationManager" xmlns="http://www.springframework.org/schema/security">
         <intercept-url pattern="/**" access="#oauth2.hasScopeInAuthZone('zones.create')" method="POST"/>
         <intercept-url pattern="/**" access="#oauth2.hasScopeInAuthZone('zones.create') or #oauth2.hasScopeInAuthZone('zones.{zone.id}.admin')" method="PUT"/>
+        <intercept-url pattern="/identity-zones/*/clients/" access="#oauth2.hasScopeInAuthZone('zones.create')" method="POST"/>
+        <intercept-url pattern="/identity-zones/*/clients/*" access="#oauth2.hasScopeInAuthZone('zones.create')" method="DELETE"/>
         <custom-filter ref="resourceAgnosticAuthenticationFilter" before="PRE_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
         <expression-handler ref="oauthWebExpressionHandler" />
@@ -46,6 +48,8 @@
             <aop:before method="checkIdentityZone" pointcut="execution(* *..IdentityZoneProvisioning+.update(..)) and args(identityZone)" />
             <aop:before method="checkIdentityZone" pointcut="execution(* *..IdentityZoneEndpoints+.updateIdentityZone(..)) and args(identityZone,*)" />
             <aop:before method="checkIdentityZoneId" pointcut="execution(* *..IdentityZoneEndpoints+.updateIdentityZone(..)) and args(*,identityZoneId)" />
+            <aop:before method="checkIdentityZoneId" pointcut="execution(* *..IdentityZoneEndpoints+.createClient(..)) and args(identityZoneId,*)" />
+            <aop:before method="checkIdentityZoneId" pointcut="execution(* *..IdentityZoneEndpoints+.deleteClient(..)) and args(identityZoneId,*)" />
         </aop:aspect>
     </aop:config>
 
