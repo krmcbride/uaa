@@ -39,6 +39,7 @@ import org.cloudfoundry.identity.uaa.authentication.AuthzAuthenticationRequest;
 import org.cloudfoundry.identity.uaa.authentication.Origin;
 import org.cloudfoundry.identity.uaa.authentication.UaaAuthentication;
 import org.cloudfoundry.identity.uaa.authentication.UaaPrincipal;
+import org.cloudfoundry.identity.uaa.client.ClientConstants;
 import org.cloudfoundry.identity.uaa.client.SocialClientUserDetails;
 import org.cloudfoundry.identity.uaa.codestore.ExpiringCode;
 import org.cloudfoundry.identity.uaa.codestore.ExpiringCodeStore;
@@ -230,7 +231,7 @@ public class LoginInfoEndpoint {
             String[] client_ids = savedRequest.getParameterValues("client_id");
             if (redirectUrl != null && redirectUrl.contains("/oauth/authorize") && client_ids != null && client_ids.length != 0) {
                 ClientDetails clientDetails = clientDetailsService.loadClientByClientId(client_ids[0]);
-                List<String> allowedIdps = (List<String>) clientDetails.getAdditionalInformation().get("allowedproviders");
+                List<String> allowedIdps = (List<String>) clientDetails.getAdditionalInformation().get(ClientConstants.ALLOWED_PROVIDERS);
                 idps = idpDefinitions.getIdentityProviderDefinitionsForClient(allowedIdps, IdentityZoneHolder.get(), false);
             }
         }
